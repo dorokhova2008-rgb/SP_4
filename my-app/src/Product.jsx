@@ -1,11 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useContext } from "react";
-import { CartContext } from "./CartContext"; // Импортируем контекст
+import { CartContext } from "./CartContext";
 import { useNavigate } from "react-router-dom";
 
 export default function Product() {
     const { id } = useParams();
-    const { addToCart } = useContext(CartContext); // Используем контекст
+    const { addToCart } = useContext(CartContext);
     const navigate = useNavigate();
 
     function handleAdd() {

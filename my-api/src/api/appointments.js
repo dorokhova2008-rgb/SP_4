@@ -1,31 +1,47 @@
-const API_URL = 'http://localhost:3001/api/appointments';
-
-export async function getAppointments() {
-    const response = await fetch(API_URL);
-    if (!response.ok) {
-        throw new Error('Ошибка при получении записей');
-    }
-    return await response.json();
+import { request } from './http';
+ export function getServices() {
+    return request('/services', { errorMessage: 'Ошибка при получении данных' });
 }
 
-export async function getAppointmentById(id) {
-    const response = await fetch(`${API_URL}/${id}`);
-    if (!response.ok) {
-        throw new Error('Ошибка при получении записи');
-    }
-    return await response.json();
+export function getCategories() {
+    return request('/categories', { errorMessage: 'Ошибка при получении категорий' });
+}
+ export function getCart() {
+    return request('/cart', { auth: true, errorMessage: 'Ошибка загрузки корзины' });
 }
 
-export async function createAppointment(appointmentData) {
-    const response = await fetch(API_URL, {
+export function addToCart(serviceId) {
+    return request('/cart', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(appointmentData),
+        auth: true,
+        body: { service_id: serviceId },
+        errorMessage: 'Ошибка добавления в корзину',
     });
-    if (!response.ok) {
-        throw new Error('Ошибка при создании записи');
-    }
-    return await response.json();
+}
+ export function removeFromCart(serviceId, removeAll = true) {
+    return request(`/cart/${serviceId}${removeAll ? '' : '?one=true'}`, {
+        method: 'DELETE',
+        auth: true,
+        errorMessage: 'Ошибка удаления',
+    });
+}
+ export function createOrder(address, date) {
+    return request('/orders', {
+        method: 'POST',
+        auth: true,
+        body: { delivery_address: address, delivery_date: date },
+        errorMessage: 'Ошибка оформления заказа',
+    });
+}
+
+export function getOrders() {
+    return request('/orders', { auth: true, errorMessage: 'Не удалось загрузить заказы' });
+}
+
+export function cancelOrder(orderId) {
+    return request(`/orders/${orderId}/cancel`, {
+        method: 'PUT',
+        auth: true,
+        errorMessage: 'Не удалось отменить заказ',
+    });
 }

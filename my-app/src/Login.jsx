@@ -7,7 +7,7 @@ export default function Login() {
         const isAuth = true;
 
         if (isAuth) {
-            navigate("/dashboard"); //программный переход после логина
+            navigate("/dashboard"); 
         }
         else {
             alert("Ошибка авторизации");
